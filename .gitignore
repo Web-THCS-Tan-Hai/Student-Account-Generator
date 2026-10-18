@@ -1,36 +1,54 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
 .pnp.js
 
-# testing
-/coverage
-
-# next.js
-/.next/
+# Build output
+/dist/
+/build/
+/release/
 /out/
+/.next/
+/coverage/
 
-# production
-/build
+# Electron
+/dist-electron/
+/electron-dist/
+*.asar
 
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
-.env*.local
-.env
-
-# vercel
-.vercel
-
-# typescript
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE and editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# Test coverage
+/coverage/
+
+# Generated student data and credentials
+student-data/
+generated-accounts/
+*.students.xlsx
+*.accounts.xlsx

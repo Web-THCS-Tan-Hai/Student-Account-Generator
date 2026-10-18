@@ -1,6 +1,10 @@
+
 import { useRef, useState } from "react";
+import type { ChangeEvent } from "react";
+
 import { generateAccounts } from "./core/generateAccounts";
 import { readStudentsExcel } from "./core/readStudentsExcel";
+import { exportAccountsExcel } from "./core/exportAccountsExcel";
 import type { StudentAccount } from "./types/student";
 
 export default function App() {
@@ -10,10 +14,11 @@ export default function App() {
   const [errors, setErrors] = useState<string[]>([]);
   const [fileName, setFileName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [showPasswords, setShowPasswords] = useState(false);
 
   async function handleFileChange(
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: ChangeEvent<HTMLInputElement>,
   ) {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -22,10 +27,12 @@ export default function App() {
     setAccounts([]);
     setErrors([]);
     setFileName(file.name);
+    setShowPasswords(false);
 
     try {
       if (!file.name.toLowerCase().endsWith(".xlsx")) {
         setErrors(["Vui lòng chọn file Excel có định dạng .xlsx."]);
+        setFileName("");
         return;
       }
 
@@ -36,6 +43,7 @@ export default function App() {
       setErrors([...result.errors, ...generated.errors]);
     } catch (error) {
       console.error("Excel import failed:", error);
+      setFileName("");
       setErrors([
         "Không thể đọc file Excel. Hãy kiểm tra file và thử lại.",
       ]);
@@ -53,6 +61,24 @@ export default function App() {
 
     if (inputRef.current) {
       inputRef.current.value = "";
+    }
+  }
+
+  async function handleExport() {
+    if (accounts.length === 0 || exporting) return;
+
+    setExporting(true);
+
+    try {
+      await exportAccountsExcel(accounts);
+    } catch (error) {
+      console.error("Excel export failed:", error);
+      setErrors((current) => [
+        ...current,
+        "Không thể xuất file Excel. Vui lòng thử lại.",
+      ]);
+    } finally {
+      setExporting(false);
     }
   }
 
@@ -97,9 +123,7 @@ export default function App() {
               : fileName || "Select a spreadsheet"}
           </h3>
 
-          <p>
-            Required columns: STT, Họ tên, Lớp.
-          </p>
+          <p>Required columns: STT, Họ tên, Lớp.</p>
 
           <input
             ref={inputRef}
@@ -111,14 +135,18 @@ export default function App() {
 
           <button
             type="button"
-            disabled={loading}
+            disabled={loading || exporting}
             onClick={() => inputRef.current?.click()}
           >
             {loading ? "Please wait..." : "Import Excel"}
           </button>
 
           {fileName && !loading && (
-            <button type="button" onClick={resetData}>
+            <button
+              type="button"
+              disabled={exporting}
+              onClick={resetData}
+            >
               Clear data
             </button>
           )}
@@ -126,7 +154,7 @@ export default function App() {
 
         {errors.length > 0 && (
           <section className="error-panel" aria-live="polite">
-            <h3>Import warnings ({errors.length})</h3>
+            <h3>Import / Export warnings ({errors.length})</h3>
             <ul>
               {errors.map((error, index) => (
                 <li key={`${index}-${error}`}>{error}</li>
@@ -192,10 +220,18 @@ export default function App() {
 
           <button
             type="button"
-            disabled={accounts.length === 0}
+            disabled={accounts.length === 0 || exporting}
             onClick={() => setShowPasswords((current) => !current)}
           >
             {showPasswords ? "Hide passwords" : "Show passwords"}
+          </button>
+
+          <button
+            type="button"
+            disabled={accounts.length === 0 || exporting}
+            onClick={handleExport}
+          >
+            {exporting ? "Exporting..." : "Export Excel"}
           </button>
         </footer>
       </section>

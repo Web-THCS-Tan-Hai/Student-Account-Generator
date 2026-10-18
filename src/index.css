@@ -1,0 +1,248 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #e8edf7;
+  background: #0b0f19;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button {
+  font: inherit;
+}
+
+.app {
+  width: min(100% - 40px, 1040px);
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+.topbar, .brand, .section-heading, .table-placeholder,
+.workspace-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  justify-content: flex-start;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #33415d;
+  border-radius: 13px;
+  background: #17243a;
+  color: #a7c7ff;
+  font-weight: 800;
+}
+
+.brand h1, .brand p, .hero h2, .hero p,
+.section-heading h3, .section-heading p,
+.upload-area h3, .upload-area p,
+.table-placeholder h3, .table-placeholder p {
+  margin: 0;
+}
+
+.brand h1 {
+  font-size: 15px;
+}
+
+.brand p, .section-heading p, .upload-area p,
+.table-placeholder p, .disclaimer {
+  margin-top: 5px;
+  color: #8d9ab1;
+  font-size: 13px;
+}
+
+.status, .step {
+  color: #9eb5d9;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.status {
+  border: 1px solid #293a54;
+  border-radius: 999px;
+  padding: 7px 10px;
+}
+
+.hero {
+  padding: 64px 0 34px;
+  max-width: 650px;
+}
+
+.eyebrow {
+  color: #83adff;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.hero h2 {
+  margin-top: 14px;
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.12;
+  letter-spacing: -1.5px;
+}
+
+.hero p {
+  margin-top: 16px;
+  max-width: 540px;
+  line-height: 1.8;
+  color: #9ba8bd;
+}
+
+.workspace {
+  overflow: hidden;
+  border: 1px solid #263247;
+  border-radius: 18px;
+  background: #111827;
+}
+
+.section-heading {
+  padding: 24px;
+  border-bottom: 1px solid #263247;
+}
+
+.section-heading h3, .table-placeholder h3 {
+  font-size: 15px;
+}
+
+.upload-area {
+  margin: 24px;
+  padding: 34px 16px;
+  text-align: center;
+  border: 1px dashed #3a4a64;
+  border-radius: 14px;
+  background: #0e1522;
+}
+
+.upload-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 16px;
+  border-radius: 12px;
+  background: #1c2a42;
+  color: #a7c7ff;
+  font-size: 25px;
+}
+
+.upload-area h3 {
+  font-size: 15px;
+}
+
+button {
+  border: 1px solid #35435a;
+  border-radius: 9px;
+  padding: 10px 15px;
+  background: #202c40;
+  color: #e8edf7;
+  font-weight: 600;
+}
+
+.upload-area button {
+  margin-top: 18px;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.table-placeholder {
+  padding: 8px 24px 20px;
+}
+
+.table-placeholder > span {
+  color: #9ba8bd;
+  font-size: 12px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+  text-align: left;
+}
+
+th, td {
+  padding: 15px 20px;
+  border-top: 1px solid #263247;
+  font-size: 12px;
+}
+
+th {
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+}
+
+td {
+  color: #d5deed;
+}
+
+.empty {
+  height: 100px;
+  text-align: center;
+  color: #78869d;
+}
+
+.workspace-footer {
+  padding: 18px 24px;
+  border-top: 1px solid #263247;
+  color: #8d9ab1;
+  font-size: 12px;
+}
+
+.disclaimer {
+  margin-top: 18px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+@media (max-width: 560px) {
+  .app {
+    width: min(100% - 24px, 1040px);
+    padding-top: 16px;
+  }
+
+  .hero {
+    padding-top: 44px;
+  }
+
+  .section-heading, .workspace-footer {
+    padding: 18px;
+  }
+
+  .upload-area {
+    margin: 16px;
+  }
+
+  .workspace-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

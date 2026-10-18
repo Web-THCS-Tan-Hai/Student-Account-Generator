@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/core/exportaccountsexcel.ts","./src/core/generateaccounts.ts","./src/core/normalizename.ts","./src/core/readstudentsexcel.ts","./src/types/student.ts"],"version":"5.8.3"}

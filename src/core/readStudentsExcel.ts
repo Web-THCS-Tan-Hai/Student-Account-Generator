@@ -1,3 +1,4 @@
+
 import ExcelJS from "exceljs";
 import type { Student } from "../types/student";
 
@@ -10,8 +11,7 @@ function normalizeHeader(value: unknown): string {
   return String(value ?? "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D")
+    .replace(/[đĐ]/g, "d")
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9]/g, "");
@@ -43,9 +43,15 @@ export async function readStudentsExcel(
   file: File,
 ): Promise<ExcelImportResult> {
   const workbook = new ExcelJS.Workbook();
-  const buffer = await file.arrayBuffer();
 
-  await workbook.xlsx.load(buffer);
+  try {
+    await workbook.xlsx.load(await file.arrayBuffer());
+  } catch {
+    return {
+      students: [],
+      errors: ["Không thể đọc file Excel. Hãy kiểm tra file .xlsx."],
+    };
+  }
 
   const worksheet = workbook.worksheets[0];
 
@@ -56,11 +62,11 @@ export async function readStudentsExcel(
     };
   }
 
-  const headerRow = worksheet.getRow(1);
   const headers = new Map<string, number>();
 
-  headerRow.eachCell((cell, column) => {
+  worksheet.getRow(1).eachCell((cell, column) => {
     const header = normalizeHeader(getCellText(cell.value));
+
     if (header && !headers.has(header)) {
       headers.set(header, column);
     }
@@ -74,7 +80,7 @@ export async function readStudentsExcel(
     return {
       students: [],
       errors: [
-        "Không tìm thấy đủ cột STT, Họ tên và Lớp ở hàng đầu tiên.",
+        "Hàng đầu tiên phải có đủ các cột: STT, Họ tên, Lớp.",
       ],
     };
   }
@@ -94,7 +100,7 @@ export async function readStudentsExcel(
     const stt = Number(sttText);
 
     if (!Number.isInteger(stt) || stt < 1) {
-      errors.push(`Dòng ${rowNumber}: STT không hợp lệ.`);
+      errors.push(`Dòng ${rowNumber}: STT phải là số nguyên dương.`);
       return;
     }
 
